@@ -893,6 +893,7 @@ export namespace Prisma {
     id: number | null
     title: string | null
     content: string | null
+    category: string | null
     createdAt: Date | null
   }
 
@@ -900,6 +901,7 @@ export namespace Prisma {
     id: number | null
     title: string | null
     content: string | null
+    category: string | null
     createdAt: Date | null
   }
 
@@ -907,6 +909,7 @@ export namespace Prisma {
     id: number
     title: number
     content: number
+    category: number
     createdAt: number
     _all: number
   }
@@ -924,6 +927,7 @@ export namespace Prisma {
     id?: true
     title?: true
     content?: true
+    category?: true
     createdAt?: true
   }
 
@@ -931,6 +935,7 @@ export namespace Prisma {
     id?: true
     title?: true
     content?: true
+    category?: true
     createdAt?: true
   }
 
@@ -938,6 +943,7 @@ export namespace Prisma {
     id?: true
     title?: true
     content?: true
+    category?: true
     createdAt?: true
     _all?: true
   }
@@ -1032,6 +1038,7 @@ export namespace Prisma {
     id: number
     title: string
     content: string | null
+    category: string | null
     createdAt: Date
     _count: PostCountAggregateOutputType | null
     _avg: PostAvgAggregateOutputType | null
@@ -1058,6 +1065,7 @@ export namespace Prisma {
     id?: boolean
     title?: boolean
     content?: boolean
+    category?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["post"]>
 
@@ -1065,6 +1073,7 @@ export namespace Prisma {
     id?: boolean
     title?: boolean
     content?: boolean
+    category?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["post"]>
 
@@ -1072,6 +1081,7 @@ export namespace Prisma {
     id?: boolean
     title?: boolean
     content?: boolean
+    category?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["post"]>
 
@@ -1079,10 +1089,11 @@ export namespace Prisma {
     id?: boolean
     title?: boolean
     content?: boolean
+    category?: boolean
     createdAt?: boolean
   }
 
-  export type PostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "content" | "createdAt", ExtArgs["result"]["post"]>
+  export type PostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "content" | "category" | "createdAt", ExtArgs["result"]["post"]>
 
   export type $PostPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Post"
@@ -1091,6 +1102,7 @@ export namespace Prisma {
       id: number
       title: string
       content: string | null
+      category: string | null
       createdAt: Date
     }, ExtArgs["result"]["post"]>
     composites: {}
@@ -1518,6 +1530,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Post", 'Int'>
     readonly title: FieldRef<"Post", 'String'>
     readonly content: FieldRef<"Post", 'String'>
+    readonly category: FieldRef<"Post", 'String'>
     readonly createdAt: FieldRef<"Post", 'DateTime'>
   }
     
@@ -1903,6 +1916,7 @@ export namespace Prisma {
     id: 'id',
     title: 'title',
     content: 'content',
+    category: 'category',
     createdAt: 'createdAt'
   };
 
@@ -2004,6 +2018,7 @@ export namespace Prisma {
     id?: IntFilter<"Post"> | number
     title?: StringFilter<"Post"> | string
     content?: StringNullableFilter<"Post"> | string | null
+    category?: StringNullableFilter<"Post"> | string | null
     createdAt?: DateTimeFilter<"Post"> | Date | string
   }
 
@@ -2011,6 +2026,7 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     content?: SortOrderInput | SortOrder
+    category?: SortOrderInput | SortOrder
     createdAt?: SortOrder
   }
 
@@ -2021,6 +2037,7 @@ export namespace Prisma {
     NOT?: PostWhereInput | PostWhereInput[]
     title?: StringFilter<"Post"> | string
     content?: StringNullableFilter<"Post"> | string | null
+    category?: StringNullableFilter<"Post"> | string | null
     createdAt?: DateTimeFilter<"Post"> | Date | string
   }, "id">
 
@@ -2028,6 +2045,7 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     content?: SortOrderInput | SortOrder
+    category?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: PostCountOrderByAggregateInput
     _avg?: PostAvgOrderByAggregateInput
@@ -2043,12 +2061,14 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Post"> | number
     title?: StringWithAggregatesFilter<"Post"> | string
     content?: StringNullableWithAggregatesFilter<"Post"> | string | null
+    category?: StringNullableWithAggregatesFilter<"Post"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Post"> | Date | string
   }
 
   export type PostCreateInput = {
     title: string
     content?: string | null
+    category?: string | null
     createdAt?: Date | string
   }
 
@@ -2056,12 +2076,14 @@ export namespace Prisma {
     id?: number
     title: string
     content?: string | null
+    category?: string | null
     createdAt?: Date | string
   }
 
   export type PostUpdateInput = {
     title?: StringFieldUpdateOperationsInput | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -2069,6 +2091,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -2076,12 +2099,14 @@ export namespace Prisma {
     id?: number
     title: string
     content?: string | null
+    category?: string | null
     createdAt?: Date | string
   }
 
   export type PostUpdateManyMutationInput = {
     title?: StringFieldUpdateOperationsInput | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -2089,6 +2114,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -2153,6 +2179,7 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     content?: SortOrder
+    category?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -2164,6 +2191,7 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     content?: SortOrder
+    category?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -2171,6 +2199,7 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     content?: SortOrder
+    category?: SortOrder
     createdAt?: SortOrder
   }
 

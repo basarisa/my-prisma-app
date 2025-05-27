@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 const Create = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [category, setCategory] = useState(""); // สร้าง state สำหรับ category
   const router = useRouter(); // ใช้ useRouter เพื่อเปลี่ยนเส้นทางหลังจากสร้างโพสต์เสร็จ
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -58,6 +59,17 @@ const Create = () => {
             rows={4}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
           ></textarea>
+        </div>
+        <div>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            <option value="">Select a category</option>
+            {/* Example static categories, replace or populate dynamically */}
+            <option value="Tech">Tech</option>
+            <option value="Lifestyle">Lifestyle</option>
+          </select>
         </div>
         <div>
           <button

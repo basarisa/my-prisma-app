@@ -1,7 +1,7 @@
 import { PrismaClient } from "../../../generated/prisma";
 const prisma = new PrismaClient(); // สร้าง instance ของ PrismaClient เพื่อใช้งานกับฐานข้อมูล
 
-// ------------------- GET METHOD -------------------
+// ------------------- GET by Id  (get ข้อมูลตาม id เพืื่อที่จะแก้ไขข้อมูล)-------------------
 export async function GET(
   request: Request,
   context: { params: Promise<{ id: string }> } // context.params จะเป็น Promise ที่ต้องรอให้เสร็จก่อน
@@ -21,13 +21,13 @@ export async function GET(
   }
 }
 
-// ------------------- PUT METHOD -------------------
+// ------------------- PUT by ID  (แก้ไขข้อมูลตาม ID )-------------------
 export async function PUT(
   request: Request,
   context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { title, content } = await request.json(); // รับข้อมูลใหม่จากฝั่ง client
+    const { title, content,category } = await request.json(); // รับข้อมูลใหม่จากฝั่ง client
     const { id } = await context.params; // รอให้ params เสร็จก่อน แล้วดึง id ออกมา
     const postId = Number(id); // แปลง id เป็นตัวเลข
     const updatedPost = await prisma.post.update({
@@ -38,6 +38,7 @@ export async function PUT(
       data: {
         title,
         content,
+        category, // Assuming category is a field in your Post model
       },
     });
     return Response.json(updatedPost); // ส่งโพสต์ที่อัปเดตกลับไปให้ client
@@ -49,7 +50,7 @@ export async function PUT(
   }
 }
 
-// ------------------- DELETE METHOD -------------------
+// ------------------- DELETE By Id -------------------//
 export async function DELETE(
   request: Request,
   context: { params: Promise<{ id: string }> }
