@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
 const Create = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [category, setCategory] = useState(""); // สร้าง state สำหรับ category
+  const [categoryId, setCategoryId] = useState(""); // Updated to use categoryId
+  const [categories, setCategories] = useState([]); // State to hold categories
   const router = useRouter(); // ใช้ useRouter เพื่อเปลี่ยนเส้นทางหลังจากสร้างโพสต์เสร็จ
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -16,12 +17,29 @@ const Create = () => {
       axios.post("/api/posts", {
         title,
         content,
+        categoryId, // ส่ง categoryId แทน category
       });
       router.push("/"); // เปลี่ยนเส้นทางไปยังหน้าแรกหลังจากสร้างโพสต์เสร็จ
     } catch (error) {
       console.error("Error creating post:", error);
     }
   };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get("/api/categories");
+      setCategories(response.data);
+    } catch (error) {
+      console.error("Failed to fetch categories", error);
+    }
+  };
+
+  // เพิ่มส่วนดึง category ออกมา
+  useEffect(() => {
+    // Fetch categories when the component mounts
+    fetchCategories();
+  }, []);
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <h1 className="text-2xl font-semibold mb-6">Create a New Post</h1>
@@ -62,13 +80,15 @@ const Create = () => {
         </div>
         <div>
           <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
+            value={categoryId}
+            onChange={(e) => setCategoryId(e.target.value)}
           >
             <option value="">Select a category</option>
-            {/* Example static categories, replace or populate dynamically */}
-            <option value="Tech">Tech</option>
-            <option value="Lifestyle">Lifestyle</option>
+            {categories.map((cat: any) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
           </select>
         </div>
         <div>

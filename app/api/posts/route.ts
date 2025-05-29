@@ -10,24 +10,33 @@ export async function GET(request: NextRequest) {
 
   //console.log({ search, category, sort }); // Debugging output
 
-  const whereCondition = {
-    title: {
-      contains: search,
-      mode: "insensitive",
-    },
-    ...(category && {
-      category: {
-        equals: category,
-        mode: "insensitive",
-      },
-    }),
-  };
+  const whereCondition = category
+    ? {
+        category: {
+          is: {
+            name: category,
+          },
+        },
+        title: {
+          contains: search,
+          mode: "insensitive",
+        },
+      }
+    : {
+        title: {
+          contains: search,
+          mode: "insensitive",
+        },
+      };
 
   const posts = await prisma.post.findMany({
     where: whereCondition as any, // Use 'as any' to avoid type issues with Prisma
     orderBy: {
       createdAt: sort, // Sort by createdAt field
     } as any,
+    include: {
+      category: true, // Include category information
+    },
   });
   // You can add filtering and sorting logic here based on search, category, and sort parameters
 
@@ -36,12 +45,12 @@ export async function GET(request: NextRequest) {
 
 export async function POST(req: Request) {
   try {
-    const { title, content, category } = await req.json();
+    const { title, content, categoryId } = await req.json();
     const newPost = await prisma.post.create({
       data: {
         title,
         content,
-        category, // Assuming category is a field in your Post model
+        categoryId: Number(categoryId), // Assuming category is a field in your Post model
       },
     });
     return Response.json(newPost);

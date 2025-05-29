@@ -8,7 +8,8 @@ const Edit = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = use(params);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [category, setCategory] = useState(""); // State for category
+  const [categoryId, setCategoryId] = useState("");
+  const [categories, setCategories] = useState([]);
   const router = useRouter();
 
   const fetchPost = async (id: string) => {
@@ -16,15 +17,24 @@ const Edit = ({ params }: { params: Promise<{ id: string }> }) => {
       const response = await axios.get(`/api/posts/${id}`);
       setTitle(response.data.title);
       setContent(response.data.content);
-      setCategory(response.data.category || ""); // Set category if available
+      setCategoryId(response.data.categoryId);
     } catch (error) {
       console.error("Error fetching post:", error);
     }
   };
 
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get("/api/categories");
+      setCategories(response.data);
+    } catch (error) {
+      console.error("Failed to fetch categories", error);
+    }
+  };
+
   useEffect(() => {
     if (id) {
-      fetchPost(id);
+      fetchPost(id), fetchCategories(); // Fetch categories when the component mounts
     }
   }, [id]);
 
@@ -34,7 +44,7 @@ const Edit = ({ params }: { params: Promise<{ id: string }> }) => {
       await axios.put(`/api/posts/${id}`, {
         title,
         content,
-        category, // Include category in the update
+        categoryId, // Include category in the update
       });
       router.push("/"); // Redirect to home page after updating
     } catch (error) {
@@ -82,13 +92,15 @@ const Edit = ({ params }: { params: Promise<{ id: string }> }) => {
         </div>
         <div>
           <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
+            value={categoryId}
+            onChange={(e) => setCategoryId(e.target.value)}
           >
             <option value="">Select a category</option>
-            {/* Example static categories, replace or populate dynamically */}
-            <option value="Tech">Tech</option>
-            <option value="Lifestyle">Lifestyle</option>
+            {categories.map((cat: any) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
           </select>
         </div>
         <div>

@@ -9,7 +9,10 @@ export async function GET(
   try {
     const { id } = await context.params; // รอให้ params เสร็จก่อน แล้วดึง id ออกมา
     const postId = Number(id);
-    const post = await prisma.post.findUnique({ where: { id: postId } });
+    const post = await prisma.post.findUnique({
+      where: { id: postId },
+      include: { category: true },
+    }); // ค้นหาโพสต์ตาม id ที่ได้รับมา
     return Response.json(post); // ส่งโพสต์ที่ค้นหากลับไปให้ client
 
     // ถ้าไม่พบโพสต์ จะส่งข้อความ "Post not found" กลับไป
@@ -27,7 +30,7 @@ export async function PUT(
   context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { title, content,category } = await request.json(); // รับข้อมูลใหม่จากฝั่ง client
+    const { title, content, categoryId } = await request.json(); // รับข้อมูลใหม่จากฝั่ง client
     const { id } = await context.params; // รอให้ params เสร็จก่อน แล้วดึง id ออกมา
     const postId = Number(id); // แปลง id เป็นตัวเลข
     const updatedPost = await prisma.post.update({
@@ -38,7 +41,7 @@ export async function PUT(
       data: {
         title,
         content,
-        category, // Assuming category is a field in your Post model
+        categoryId: Number(categoryId), // Assuming category is a field in your Post model
       },
     });
     return Response.json(updatedPost); // ส่งโพสต์ที่อัปเดตกลับไปให้ client

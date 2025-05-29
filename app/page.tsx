@@ -8,6 +8,7 @@ export default function Home() {
   const [posts, setPosts] = useState([]); // สร้าง state สำหรับเก็บโพสต์
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
+  const [categories, setCategories] = useState([]);
   const [sort, setSort] = useState("desc");
 
 
@@ -16,6 +17,15 @@ export default function Home() {
       const query = new URLSearchParams({category,search,sort}).toString(); // สร้าง query string สำหรับการค้นหา
       const response = await axios.get(`/api/posts?${query}`); // ทำการเรียก API เพื่อดึงข้อมูลโพสต์
       setPosts(response.data); // เก็บข้อมูลโพสต์ใน state
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(`/api/categories`); // ทำการเรียก API เพื่อดึงข้อมูลโพสต์
+      setCategories(response.data); // เก็บข้อมูลโพสต์ใน state
     } catch (error) {
       console.error("Error fetching posts:", error);
     }
@@ -36,6 +46,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchPosts(); // เรียกใช้ฟังก์ชัน fetchPosts เมื่อ component ถูก mount
+    fetchCategories(); // เรียกใช้ฟังก์ชัน fetchCategories เมื่อ component ถูก mount
   }, []);
 
   return (
@@ -56,8 +67,11 @@ export default function Home() {
             className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
             <option value="">Select Category</option>
-            <option value="Tech">Tech</option>
-            <option value="Lifestyle">Lifestyle</option>
+            {categories.map((cat: any) => (
+              <option key={cat.id} value={cat.name}>
+                {cat.name}
+              </option>
+            ))}
           </select>
           <select
             value={sort}
@@ -109,7 +123,7 @@ export default function Home() {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm font-medium text-gray-900">
-                    {post.category}
+                    {post.category.name || "Uncategorized"}
                   </div>
                 </td>
 
