@@ -4,35 +4,50 @@ const prisma = new PrismaClient();
 
 export async function PUT(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { name } = await req.json();
+
     const category = await prisma.category.update({
-      where: { id: Number(params.id) },
+      where: { id: Number(id) },
       data: { name },
     });
+
     return Response.json(category);
   } catch (error) {
-    return new Response(error as BodyInit, {
-      status: 500,
-    });
+    console.error("PUT error:", error);
+    return new Response(
+      JSON.stringify({ error: "Failed to update category" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   }
 }
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    return Response.json(
-      await prisma.category.delete({
-        where: { id: Number(params.id) },
-      })
-    );
-  } catch (error) {
-    return new Response(error as BodyInit, {
-      status: 500,
+    const { id } = await params;
+
+    const deletedCategory = await prisma.category.delete({
+      where: { id: Number(id) },
     });
+
+    return Response.json(deletedCategory);
+  } catch (error) {
+    console.error("DELETE error:", error);
+    return new Response(
+      JSON.stringify({ error: "Failed to delete category" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   }
 }
