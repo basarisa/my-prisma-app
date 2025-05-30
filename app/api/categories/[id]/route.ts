@@ -2,12 +2,9 @@ import { PrismaClient } from "../../../generated/prisma";
 
 const prisma = new PrismaClient();
 
-export async function PUT(
-  req: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PUT(req: Request, context: any) {
   try {
-    const { id } = await params;
+    const id = context.params.id;
     const { name } = await req.json();
 
     const category = await prisma.category.update({
@@ -28,12 +25,9 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(req: Request, context: any) {
   try {
-    const { id } = await params;
+    const id = context.params.id;
 
     const deletedCategory = await prisma.category.delete({
       where: { id: Number(id) },
